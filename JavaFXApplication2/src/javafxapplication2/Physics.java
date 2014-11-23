@@ -124,7 +124,7 @@ public class Physics {
                   
                 }
                 else {
-                    System.out.println("Run transitions");
+                    System.out.println("Run transitions now");
                     ((Timer) evt.getSource()).stop();
                 }
             }
