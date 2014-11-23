@@ -94,7 +94,7 @@ public class Physics {
             }  
         }
         System.out.println(dayList.size());
-        int aggregateDays = (int) Math.round(dayList.size() / 83); //No reason to run through all days if there are many days 
+        int aggregateDays = (int) Math.round(dayList.size() / 80); //No reason to run through all days if there are many days 
         
         int tempDelay = (int)Math.round(500 / dayList.size());
         int delay = tempDelay < 60 ? 60 : tempDelay; //milliseconds //If under 60 thread exceptions occur      
