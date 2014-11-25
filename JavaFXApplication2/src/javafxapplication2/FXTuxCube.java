@@ -366,7 +366,7 @@ public final class FXTuxCube extends Application {
                 date = datePicker.getValue();
                 day = translateDateToDay(date);
                 physics.movePlanets(startDay, day, tuxCubeSubScene.getTuxCubeCenterGroup().getChildren(), planets); 
-                System.out.println("Selected date: " + date + ", day; " + day);
+                //System.out.println("Selected date: " + date + ", day; " + day);
             }
         });
         
@@ -700,7 +700,7 @@ public final class FXTuxCube extends Application {
         int year = date.getYear();
 
         day = 367 * year - (7 * (year + ((month + 9) / 12))) / 4 + (275 * month) / 9 + day - 730530;
-         System.out.println("Day: " + day);
+         //System.out.println("Day: " + day);
 
         return day;
 	}

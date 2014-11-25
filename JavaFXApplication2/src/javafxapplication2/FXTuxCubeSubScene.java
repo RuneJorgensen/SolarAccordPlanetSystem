@@ -295,7 +295,7 @@ final class FXTuxCubeSubScene {
         tuxRotTransAll = new RotateTransition[numTux];
         
         ObservableList<Node> planetCenterList = createPlanetarySystem(planets);
-        System.out.println("Number of planetSpheres: " + planetCenterList.size());
+        //System.out.println("Number of planetSpheres: " + planetCenterList.size());
         
         tuxCubeBinL = (BoundingBox)tuxCubeCenterGroup.getBoundsInLocal();     
 
@@ -310,7 +310,7 @@ final class FXTuxCubeSubScene {
         
         for(Planet planet : planets){
             planetCenterList.add(createPlanetGroup(planet.getName(), planet.getFirstColor(), planet.getSecondColor(), planet.getRadius(), planet.getxEclipAdjusted(0), planet.getyEclipAdjusted(0), planet.getzEclipAdjusted(0)));
-            System.out.println("Planet position: " + planet.getxEclipAdjusted(0)+ ", " + planet.getyEclipAdjusted(0) + ", " + planet.getzEclipAdjusted(0));
+            //System.out.println("Planet position: " + planet.getxEclipAdjusted(0)+ ", " + planet.getyEclipAdjusted(0) + ", " + planet.getzEclipAdjusted(0));
         }
         
         return planetCenterList;

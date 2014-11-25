@@ -60,17 +60,17 @@ public class Physics {
                         trans.setFromY(planet.getyEclipAdjusted(addConstantY));
                         trans.setFromZ(planet.getzEclipAdjusted(addConstantZ));
                         planet.setDay(startDayTemp);
-                        System.out.println("Planet: " + planet.getName() + ", Day: " + startDayTemp + ", "
-                        + planet.getxEclipAdjusted(addConstantX) + ", " 
-                        + planet.getyEclipAdjusted(addConstantY) + ", " 
-                        + planet.getzEclipAdjusted(addConstantZ));
+                        //System.out.println("Planet: " + planet.getName() + ", Day: " + startDayTemp + ", "
+                        //+ planet.getxEclipAdjusted(addConstantX) + ", "
+                        //+ planet.getyEclipAdjusted(addConstantY) + ", "
+                        //+ planet.getzEclipAdjusted(addConstantZ));
 
                         trans.setToX(planet.getxEclipAdjusted(addConstantX));
                         trans.setToY(planet.getyEclipAdjusted(addConstantY));
                         trans.setToZ(planet.getzEclipAdjusted(addConstantZ));
 
                         trans.setDuration(Duration.seconds(1));
-                        System.out.println("check " + planetNumber);
+                        //System.out.println("check " + planetNumber);
                         if(planetNumber == 0){
                             ArrayList<TranslateTransition> transList = new ArrayList<TranslateTransition>();
                             transList.add(trans);
@@ -86,19 +86,22 @@ public class Physics {
                         else{
                                 startDayTemp--;
                         }	
-                        System.out.println(planet.getName() + ": day" + dayIndex);
+                        //System.out.println(planet.getName() + ": day" + dayIndex);
                         dayIndex++;  
                     }
                     planetNumber++;
                 }
             }  
         }
-        System.out.println(dayList.size());
+        //System.out.println(dayList.size());
         int aggregateDays = (int) Math.round(dayList.size() / 80); //No reason to run through all days if there are many days 
-        
-        int tempDelay = (int)Math.round(500 / dayList.size());
-        int delay = tempDelay < 60 ? 60 : tempDelay; //milliseconds //If under 60 thread exceptions occur      
-        System.out.println("Delay" + delay);
+
+        int tempDelay = 0;
+        if(dayList.size() > 0) {
+            tempDelay = (int) Math.round(500 / dayList.size());
+        }
+        int delay = tempDelay < 60 ? 60 : tempDelay; //milliseconds //If under 60 thread exceptions occur
+        //System.out.println("Delay" + delay);
         ActionListener taskPerformer = new ActionListener() {
             int daySize = 0;
             
@@ -108,23 +111,23 @@ public class Physics {
                   ArrayList<TranslateTransition> day = dayList.get(daySize);
                     
                   for(TranslateTransition transition : day){
-                        System.out.println("Planet ++");
+                        //System.out.println("Planet ++");
                         transition.setDuration(Duration.millis(delay));
                         transition.play();
                         
                     }
                   if(aggregateDays > 1 && aggregateDays + daySize < dayList.size()){
                       daySize += aggregateDays;
-                      System.out.println("Days + " + aggregateDays);
+                      //System.out.println("Days + " + aggregateDays);
                   }
                   else {
-                    System.out.println("Days + 1");
+                    //System.out.println("Days + 1");
                     daySize++;  
                   }
                   
                 }
                 else {
-                    System.out.println("Run transitions now");
+                    //System.out.println("Run transitions now");
                     ((Timer) evt.getSource()).stop();
                 }
             }
