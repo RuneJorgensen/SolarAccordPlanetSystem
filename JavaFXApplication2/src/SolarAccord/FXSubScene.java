@@ -70,7 +70,7 @@ final class FXSubScene {
     
     enum VP {
         Select("Select"),
-        BOTTOM("Bottom"), FRONT("Front"), TOP("Top");
+        FRONT("Front"), TOP("Top");
         VP(String listName) {
             this.listName = listName;
         }
@@ -270,27 +270,8 @@ final class FXSubScene {
 
         // Clear cube
         tuxCubeCenterGroup.getChildren().clear();
-                            
-        // Center Tux for rotation
-        final double transZ = -0.01396;
-        
-        final int xDist = 2;
-        final int yDist = 2;
-        final int zDist = 2;
-        
-        long delay = 4;
-        final long delayIncr = 4;
-        
-        // Appearances for body and front
 
         final int numTux = 3;
-        final double maxTux = 10*10*10;
-                
-        int n = 0;
-        
-        float xTrans = 0;
-        float yTrans = 0;
-        float zTrans = 0;
         
         tuxRotTransAll = new RotateTransition[numTux];
         
@@ -376,20 +357,12 @@ final class FXSubScene {
         final double distance = distToSceneCenter(sceneDiameter/2);
         
         switch(vp) {
-            case BOTTOM:
-//                rotate = new Rotate(-180, Rotate.Z_AXIS);
-                break;
             case FRONT:
-//                rotate = new Rotate(90, Rotate.X_AXIS);
-//                Rotate rotateX = new Rotate(90, Rotate.X_AXIS);
-//                Rotate rotateY = new Rotate(90, Rotate.Y_AXIS);
+                rotate = new Rotate(90, Rotate.X_AXIS);
 //                rotate = rotateX.createConcatenation(rotateY);
                 break;
             case TOP:
-                Rotate rotateTopZ = new Rotate(90, Rotate.Z_AXIS);
-//                Rotate rotateTopY = new Rotate(90, Rotate.Y_AXIS);
-//                rotate = rotateTopZ.createConcatenation(rotateTopY);
-                rotate = rotateTopZ;
+                rotate = new Rotate(0, Rotate.Z_AXIS);
                break;
         }
         if(rotate != null){viewingRotate.setToTransform(rotate);}
@@ -422,7 +395,7 @@ final class FXSubScene {
                
     private double distToSceneCenter(double sceneRadius) {
         // Extra space
-        final double borderFactor = 2.0;
+        final double borderFactor = 1.5;
         
         final double fov = perspectiveCamera.getFieldOfView();
         
@@ -456,10 +429,10 @@ final class FXSubScene {
         final PhongMaterial blueMaterial = new PhongMaterial();
         blueMaterial.setDiffuseColor(Color.DARKBLUE);
         blueMaterial.setSpecularColor(Color.BLUE);
- 
-        final Box xAxis = new Box(250.0, 0.1, 0.1);
-        final Box yAxis = new Box(0.1, 250.0, 0.1);
-        final Box zAxis = new Box(0.1, 0.1, 250.0);
+        double diameter = 0.009;
+        final Box xAxis = new Box(250.0, diameter, diameter);
+        final Box yAxis = new Box(diameter, 250.0, diameter);
+        final Box zAxis = new Box(diameter, diameter, 250.0);
         
         xAxis.setMaterial(redMaterial);
         yAxis.setMaterial(greenMaterial);

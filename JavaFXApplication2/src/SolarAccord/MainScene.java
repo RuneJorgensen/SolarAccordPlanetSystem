@@ -208,12 +208,7 @@ public final class MainScene extends Application {
         // Title
         //
         
-        final HUDLabel titleLeftLabel = new HUDLabel("FXTuxCube", titleFont);       
-        final HUDLabel titleRightLabel = new HUDLabel("JavaFX 8 3D", titleFont);
-        
-        //
-        // 3D scene details and performance
-        //
+        final HUDLabel titleLeftLabel = new HUDLabel("Solar System", titleFont); 
         
         // FPS - frames per second
            
@@ -296,79 +291,24 @@ public final class MainScene extends Application {
         // Controls
         //
         
-        // Cube size
+      final ObservableList<Number> nums = FXCollections.<Number>observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
         
-        final HUDLabel numTitleLabel = new HUDLabel("Cube");
-        numTitleLabel.setTooltip(new Tooltip("width x height x depth"));
-        
-        final ObservableList<Number> nums = FXCollections.<Number>observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
-        
-        final ComboBox<Number> cubeCombo = new ComboBox<>();
-        cubeCombo.setTooltip(new Tooltip("width x height x depth"));
-        cubeCombo.setItems(nums);
-        cubeCombo.setVisibleRowCount(12);
-        cubeCombo.getSelectionModel().select(2);               
-        cubeCombo.getSelectionModel().selectedItemProperty().addListener(
-            new ChangeListener<Number>() {
-                @Override 
-                public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {  
-                    int num = (Integer)new_val;
-                    int num3 = num*num*num;
-                    
-                    tuxCubeSubScene.createTuxCubeOfDim();      
-                    tuxCubeSubScene.setVantagePoint(VP.FRONT);
-                    
-                    numTuxesLabel.setText( numFormat.format(num3) );
-                    numShape3dLabel.setText( numFormat.format(num3*6) );
-                    numTriaLabel.setText( numFormat.format(num3*13744) );
-                }
-            }
-        );                
-        cubeCombo.setButtonCell(new ListCell<Number>() {
-            {
-                this.setFont(cellFont);
-            }      
-            @Override protected void updateItem(Number item, boolean empty) {
-                // calling super here is very important - don't skip this!
-                super.updateItem(item, empty);                                               
-                if (item != null) {
-                    this.setText(Integer.toString((Integer)item));
-                }
-            }
-        });       
-        cubeCombo.setCellFactory(new Callback<ListView<Number>, ListCell<Number>>() {
-            @Override public ListCell<Number> call(ListView<Number> p) {
-                return new ListCell<Number>() {
-                    {
-                        this.setFont(cellFont);
-                    }       
-                    @Override protected void updateItem(Number item, boolean empty) {
-                        // calling super here is very important - don't skip this!
-                        super.updateItem(item, empty);                                               
-                        if (item != null) {
-                            this.setText(Integer.toString((Integer)item));
-                        }
-                    }
-                };
-            }
-        });
-        
-        // Create the DatePicker.		
-        datePicker.setShowWeekNumbers(false);
+    // Create the DatePicker.		
+    datePicker.setShowWeekNumbers(false);
 
-        day = translateDateToDay(date);
-        // Add some action
-        datePicker.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent event) {
-                // TODO Auto-generated method stub
-                int startDay = day;
-                date = datePicker.getValue();
-                day = translateDateToDay(date);
-                physics.movePlanets(startDay, day, tuxCubeSubScene.getTuxCubeCenterGroup().getChildren(), planets); 
-                //System.out.println("Selected date: " + date + ", day; " + day);
-            }
-        });
+    day = translateDateToDay(date);
+    // Add some action
+    datePicker.setOnAction(new EventHandler<ActionEvent>(){
+        @Override
+        public void handle(ActionEvent event) {
+            // TODO Auto-generated method stub
+            int startDay = day;
+            date = datePicker.getValue();
+            day = translateDateToDay(date);
+            physics.movePlanets(startDay, day, tuxCubeSubScene.getTuxCubeCenterGroup().getChildren(), planets); 
+            //System.out.println("Selected date: " + date + ", day; " + day);
+        }
+    });
         
         // Viewpoints   
         
@@ -378,7 +318,7 @@ public final class MainScene extends Application {
         // Prompt text workaround !!!!!!!!!!!!!!!!!!
         final ComboBox<VP> vpCombo = new ComboBox<VP>();
         vpCombo.setTooltip(new Tooltip("select viewpoint"));
-        vpCombo.getItems().addAll(VP.BOTTOM, VP.FRONT, VP.TOP); // DO NOT add VP.Select !!
+        vpCombo.getItems().addAll(VP.FRONT, VP.TOP); // DO NOT add VP.Select !!
         // Pre-select the prompt text item
         vpCombo.setValue(VP.Select);       
         vpCombo.valueProperty().addListener(new ChangeListener<VP>() {
@@ -419,31 +359,6 @@ public final class MainScene extends Application {
                 };
             }
         });
-       
-        // Tux rotation
-        
-        final HUDLabel tuxRotTitlelabel = new HUDLabel("Tux");
-        tuxRotTitlelabel.setTooltip(new Tooltip("start/pause rotation of Tuxes"));
-       
-
-        // Cube rotation
-        
-        final HUDLabel rotationLabel = new HUDLabel("    <  Cube Rotation  >    ");
-        rotationLabel.setTooltip(new Tooltip("direction & speed of rotation"));
-        
-        final Slider rotationSlider = new Slider(20, 80, 50);
-        rotationSlider.setBlockIncrement(0.6);
-        rotationSlider.valueProperty().addListener(new ChangeListener<Number>(){
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                isCubeRotating = (newValue.floatValue() < 49f || newValue.floatValue() > 51f);
-                tuxCubeSubScene.setRotationSpeed(((Double)newValue).floatValue());
-                
-                checkFPS();
-            }
-        });
-        rotationSlider.setTooltip(new Tooltip("direction & speed of rotation"));
-      
         //planet information        
         planetInfoPane.setHgap(5);
         planetInfoPane.setVgap(3);
@@ -460,16 +375,10 @@ public final class MainScene extends Application {
         controlPane.setHgap(10);
         controlPane.setVgap(4);
         controlPane.setGridLinesVisible(false);
-        
-        controlPane.add(numTitleLabel, 0, 0);
-        controlPane.add(cubeCombo, 0, 1);
- 
+
         controlPane.add(vpTitleLabel, 1, 0);
         controlPane.add(vpCombo, 1, 1);
-                
-        controlPane.add(rotationLabel, 3, 0);
-        controlPane.add(rotationSlider, 3, 1);     
-        
+
         controlPane.add(datePicker, 3, 0);
         
         for (int i=0; i < 4; i++) {
@@ -535,10 +444,7 @@ public final class MainScene extends Application {
                 double height = scene.getHeight();
 
                 titleLeftLabel.autosize();
-                titleLeftLabel.relocate(border, border);
-                
-                titleRightLabel.autosize();
-                titleRightLabel.relocate(width-titleRightLabel.getWidth()-border, border);
+                titleLeftLabel.relocate(width-titleLeftLabel.getWidth()-border, border);
                 
                 planetInfoPane.autosize();
                 planetInfoPane.relocate(5, 5);
@@ -554,7 +460,7 @@ public final class MainScene extends Application {
                 pixHeightLabel.setText(numFormat.format((int)height));
             }
         };
-        layeredPane.getChildren().addAll(subScene, titleLeftLabel, titleRightLabel, planetInfoPane, controlPane, outputPane);
+        layeredPane.getChildren().addAll(subScene, titleLeftLabel, planetInfoPane, controlPane, outputPane);
          
         // Backgrounds 
         
@@ -654,7 +560,7 @@ public final class MainScene extends Application {
         
         lastTime = System.nanoTime();
         tuxCubeSubScene.createTuxCubeOfDim();
-        tuxCubeSubScene.setVantagePoint(VP.FRONT);
+        tuxCubeSubScene.setVantagePoint(VP.TOP);
 
         //
         fpsTimer = new AnimationTimer() {
@@ -759,53 +665,53 @@ public final class MainScene extends Application {
     }
     
     private void createPlanets(){
-        Planet mercury =  new Planet("Mercury", Color.DARKGRAY, Color.AZURE, 0.07, 88, 48.3313, 0.0000324587, 7.0047, 0.00000005, 29.1241, 0.0000101444, 0.387098, 0, 
+        Planet mercury =  new Planet("Mercury", Color.DARKGRAY, Color.AZURE, 0.05, 88, 48.3313, 0.0000324587, 7.0047, 0.00000005, 29.1241, 0.0000101444, 0.387098, 0, 
                         0.205635, 0.000000000559, 168.6562, 4.0923344368);
         mercury.setDay(day);
         planets.add(mercury);	      
 
-        Planet venus = new Planet("Venus", Color.CORNSILK, Color.BISQUE, 0.09, 225, 76.679, 0.000024659, 3.3946, 0.0000000275, 54.8910, 0.0000138374,
+        Planet venus = new Planet("Venus", Color.CORNSILK, Color.BISQUE, 0.06, 225, 76.679, 0.000024659, 3.3946, 0.0000000275, 54.8910, 0.0000138374,
                         0.723330, 0.0, 0.006773, - 0.000000001302, 48.0052, 1.6021302244);
         venus.setDay(day);
         planets.add(venus);
 
         //Udregnet efter solens tal, s� passer m�ske ikke
-        Planet earth = new Planet("Earth", Color.BLUE, Color.BURLYWOOD, 0.1, 365, 0.0, 0.0, 0.0, 0.0, 282.940, 0.0000470935,
+        Planet earth = new Planet("Earth", Color.BLUE, Color.BURLYWOOD, 0.075, 365, 0.0, 0.0, 0.0, 0.0, 282.940, 0.0000470935,
                  1.000000, 0.0, 0.016709, 0.000000001151, 356.0470, 0.9856002585);
         earth.setDay(day);
         planets.add(earth);
 
-        Planet mars = new Planet("Mars", Color.RED, Color.YELLOW, 0.09, 780, 49.5574, 0.0000211081, 1.8497, 0.0000000178, 286.5016, 0.0000292961,
+        Planet mars = new Planet("Mars", Color.RED, Color.YELLOW, 0.06, 780, 49.5574, 0.0000211081, 1.8497, 0.0000000178, 286.5016, 0.0000292961,
                         1.523688, 0.0, 0.093405, 0.0000000025162, 18.6021, 0.5240207766);
         mars.setDay(day);
         planets.add(mars);
 
-        Planet jupiter = new Planet("Jupiter", Color.ANTIQUEWHITE, Color.BURLYWOOD, 0.15,4333, 100.4542, 0.0000276854, 1.3030, 0.0000001557, 273.8777, 0.0000164505,
+        Planet jupiter = new Planet("Jupiter", Color.ANTIQUEWHITE, Color.BURLYWOOD, 0.11,4333, 100.4542, 0.0000276854, 1.3030, 0.0000001557, 273.8777, 0.0000164505,
                         5.20256, 0.0, 0.048498, 0.000000004469, 19.8950, 0.0830853001);
         jupiter.setDay(day);
         planets.add(jupiter);        
 
-        Planet saturn = new Planet("Saturn", Color.BURLYWOOD, Color.DARKKHAKI, 0.13, 10760, 113.6634, 0.0000238980, 2.4886, 0.0000001081, 339.3939, 0.0000297661,
+        Planet saturn = new Planet("Saturn", Color.BURLYWOOD, Color.DARKKHAKI, 0.098, 10760, 113.6634, 0.0000238980, 2.4886, 0.0000001081, 339.3939, 0.0000297661,
                         9.55475, 0.0, 0.055546, -0.000000009499, 316.9670, 0.0334442282);
         saturn.setDay(day);
         planets.add(saturn);       
 
-        Planet ceres = new Planet("Ceres", Color.CADETBLUE, Color.DARKKHAKI, 0.05, 1681, 80.3276, 0.0000011081, 10.593, 0.0000000108, 142.2921, 0.0000002961, 
+        Planet ceres = new Planet("Ceres", Color.CADETBLUE, Color.DARKKHAKI, 0.045, 1681, 80.3276, 0.0000011081, 10.593, 0.0000000108, 142.2921, 0.0000002961, 
                         2.7668, 0.0, 0.095797, 0.0000000005162, 10.557, 0.2189907766);
         ceres.setDay(day);
         planets.add(ceres);   
 
-        Planet vesta = new Planet("Vesta", Color.DARKGRAY, Color.BLACK, 0.05, 1325, 103.91, 0.0000011081, 7.134, 0.0000000108, 149.84, 0.0000002961, 
+        Planet vesta = new Planet("Vesta", Color.DARKGRAY, Color.BLACK, 0.045, 1325, 103.91, 0.0000011081, 7.134, 0.0000000108, 149.84, 0.0000002961, 
                         2.362, 0.0, 0.008862, 0.0000000005162, 307.80, 0.2752507766);
         vesta.setDay(day);
         planets.add(vesta);  
 
-        Planet pallas = new Planet("Pallas", Color.LIGHTSTEELBLUE, Color.GRAY, 0.05, 1681, 233.12, 0.0000011081, 34.841, 0.0000000108, 110.15, 0.0000002961, 
+        Planet pallas = new Planet("Pallas", Color.LIGHTSTEELBLUE, Color.GRAY, 0.045, 1681, 233.12, 0.0000011081, 34.841, 0.0000000108, 110.15, 0.0000002961, 
                         2.772, 0.0, 0.231, 0.0000000005162, 96.15, 0.2189907766);
         pallas.setDay(day);
         planets.add(pallas);  
 
-        Planet hygiea = new Planet("Hygiea", Color.DARKGRAY, Color.BLACK, 0.05, 2030, 333.45, 0.0000011081, 3.842, 0.0000000108, 313.19, 0.0000002961, 
+        Planet hygiea = new Planet("Hygiea", Color.DARKGRAY, Color.BLACK, 0.045, 2030, 333.45, 0.0000011081, 3.842, 0.0000000108, 313.19, 0.0000002961, 
                         3.139, 0.0, 0.197, 0.0000000005162, 197.96, 0.2189907766);
         hygiea.setDay(day);
         planets.add(hygiea);  

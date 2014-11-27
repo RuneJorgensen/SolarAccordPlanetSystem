@@ -94,7 +94,7 @@ public class Physics {
             }  
         }
         //System.out.println(dayList.size());
-        int aggregateDays = (int) Math.round(dayList.size() / 80); //No reason to run through all days if there are many days 
+        int aggregateDays = (int) Math.round(dayList.size() / 100); //No reason to run through all days if there are many days 
 
         int tempDelay = 0;
         if(dayList.size() > 0) {
