@@ -101,3 +101,5 @@ sympy-plots-for-*.tex/
 
 # C++
 *.out
+/SolarAccord/dist/
+/SolarAccord/build/
