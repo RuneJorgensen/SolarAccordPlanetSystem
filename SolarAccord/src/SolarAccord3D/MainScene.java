@@ -28,10 +28,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
-import javafx.scene.SubScene;
+import javafx.scene.*;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -327,7 +324,7 @@ public final class MainScene extends Application {
                 if (new_val != null && new_val != VP.Select) {
                     tuxCubeSubScene.setVantagePoint(new_val);
                     // Select the prompt text item
-                    vpCombo.setValue(VP.Select);
+//                    vpCombo.setValue(VP.Select);
                 }
             }
         });            
@@ -362,11 +359,13 @@ public final class MainScene extends Application {
         //planet information        
         planetInfoPane.setHgap(5);
         planetInfoPane.setVgap(3);
-        planetInfoPane.setGridLinesVisible(false);
+        planetInfoPane.setGridLinesVisible(true);
         Text planetName = new Text("Sun");
+        planetName.setId("PlanetName");
         planetName.setFill(Color.ALICEBLUE);
         planetInfoPane.add(planetName, 0, 0);
         planetInfoPane.setId("InfoPane");
+        planetInfoPane.setStyle("-fx-background-color: #FFFFFF;");
 
         
         // Collect all controls
@@ -660,8 +659,19 @@ public final class MainScene extends Application {
     }
     
     public static void setNameForPlanetInfoPane(String name){
-        Text text = (Text)planetInfoPane.getChildren().get(0);
-        text.setText(name);
+        Text text = (Text)getChildById(planetInfoPane.getChildren(), "PlanetName");
+        if(text != null) { text.setText(name); }
+    }
+
+    public static Node getChildById(ObservableList<Node> list, String id){
+        Node result = null;
+        for(Node child : list){
+            if(child.getId() != null) {
+                result = child.getId().equals(id) ? child : null;
+            }
+            if(result != null) { break;}
+        }
+        return result;
     }
     
     private void createPlanets(){

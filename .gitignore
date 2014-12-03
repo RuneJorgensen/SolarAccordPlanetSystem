@@ -103,3 +103,4 @@ sympy-plots-for-*.tex/
 *.out
 /SolarAccord/dist/
 /SolarAccord/build/
+/SolarAccord/nbproject/private/

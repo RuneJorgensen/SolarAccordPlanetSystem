@@ -33,9 +33,8 @@ public class Physics {
                 timeMovesForward = false;
         }
         int startDayTemp = startDay;
-        int endDayTemp = endDay;
         
-        ArrayList<ArrayList> dayList = new ArrayList<>();
+        ArrayList<ArrayList> dayList = new ArrayList<ArrayList>();
         int planetNumber = 0;
         for(Node planetNode : planetCenterList){  
             
@@ -44,16 +43,18 @@ public class Physics {
                 Group planetRotationGroup = (Group) planetPositionGroup.getChildren().get(0);
                 Group planetSphereGroup = (Group) planetRotationGroup.getChildren().get(0);
 
-                startDayTemp = startDay;
-                endDayTemp = endDay;
+
 
                 Sphere sphere = (Sphere) planetSphereGroup.getChildren().get(0);
                 Planet planet = getPlanetById(sphere.getId(), planets);
 
                 if(planet != null){//The sun should not be moved, but is still the first entry in planetCenterList
+                    startDayTemp = startDay;
 
+                    int aggregateD = (int) Math.round(Math.abs(startDay - endDay) / 100); //No reason to run through all days if there are many days
+                    aggregateD = aggregateD < 1 ? 1 : aggregateD;
                     int dayIndex = 0;
-                    while(Math.abs(startDayTemp - endDayTemp) > 0){
+                    while(Math.abs(startDayTemp - endDay) > 0){
                         TranslateTransition trans = new TranslateTransition();
                         trans.setNode(planetPositionGroup);
                         trans.setFromX(planet.getxEclipAdjusted(addConstantX));
@@ -81,50 +82,50 @@ public class Physics {
                         }
 
                         if(timeMovesForward){
-                                startDayTemp++;
+                                if(endDay - (startDayTemp + aggregateD) < 1){
+                                    aggregateD = endDay - startDayTemp;
+                                }
+                                startDayTemp += aggregateD;
                         }
                         else{
-                                startDayTemp--;
+                                if(endDay - (startDayTemp - aggregateD) > -1){
+                                    aggregateD = startDayTemp - endDay;
+                                }
+                                startDayTemp -= aggregateD;
                         }	
                         //System.out.println(planet.getName() + ": day" + dayIndex);
-                        dayIndex++;  
+                        dayIndex++;
                     }
                     planetNumber++;
                 }
             }  
         }
         //System.out.println(dayList.size());
-        int aggregateDays = (int) Math.round(dayList.size() / 100); //No reason to run through all days if there are many days 
 
         int tempDelay = 0;
         if(dayList.size() > 0) {
             tempDelay = (int) Math.round(500 / dayList.size());
         }
-        int delay = tempDelay < 60 ? 60 : tempDelay; //milliseconds //If under 60 thread exceptions occur
+        final int delay = tempDelay < 60 ? 60 : tempDelay; //milliseconds //If under 60 thread exceptions occur
         //System.out.println("Delay" + delay);
+
+        final ArrayList<ArrayList> daysList = dayList;
         ActionListener taskPerformer = new ActionListener() {
             int daySize = 0;
             
             @Override
             public void actionPerformed(ActionEvent evt) {
-                if(daySize < dayList.size()){
-                  ArrayList<TranslateTransition> day = dayList.get(daySize);
+                if(daySize < daysList.size()){
+                  ArrayList<TranslateTransition> day = daysList.get(daySize);
                     
-                  for(TranslateTransition transition : day){
+                    for(TranslateTransition transition : day){
                         //System.out.println("Planet ++");
                         transition.setDuration(Duration.millis(delay));
                         transition.play();
-                        
+
                     }
-                  if(aggregateDays > 1 && aggregateDays + daySize < dayList.size()){
-                      daySize += aggregateDays;
-                      //System.out.println("Days + " + aggregateDays);
-                  }
-                  else {
-                    //System.out.println("Days + 1");
-                    daySize++;  
-                  }
-                  
+
+                    daySize ++;
                 }
                 else {
                     //System.out.println("Run transitions now");

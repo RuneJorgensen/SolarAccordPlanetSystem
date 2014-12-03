@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SolarAccord">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/SolarAccord/dist/SolarAccord.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -115,9 +115,6 @@ final class FXSubScene {
     }
     
     private void createBaseScene() {
-        
-        
-        
         //
         // Viewing : Camera & Light
         //
@@ -244,30 +241,6 @@ final class FXSubScene {
 
     // 
     void createTuxCubeOfDim() {
-        
-        // Tux : 13.744 triangles, 6 MeshViews
-        
-        // TuxBody :   3.856
-        // TuxEyes :   1.056
-        // TuxFeet :   4.640
-        // TuxFront :    192
-        // TuxMouth :  2.944
-        // TuxPupils : 1.056
-        
-        //          #Tux             triangles  MeshViews
-        // dim  1 :    1 * 13.744 =     13.744          6
-        // dim  2 :    8 * 13.744 =    109.952         48
-        // dim  3 :   27 * 13.744 =    371.088        162
-        // dim  4 :   64 * 13.744 =    879.616        384
-        // dim  5 :  125 * 13.744 =  1.718.000        750
-        // dim  6 :  216 * 13.744 =  2.968.704      1.296
-        // dim  7 :  343 * 13.744 =  4.714.192      2.058
-        // dim  8 :  512 * 13.744 =  7.036.928      3.072
-        // dim  9 :  729 * 13.744 = 10.019.376      4.374
-        // dim 10 : 1000 * 13.744 = 13.744.000      6.000
-        // dim 11 : 1331 * 13.744 = 18.293.264      7.986
-        // dim 12 : 1728 * 13.744 = 23.749.632     10.368
-
         // Clear cube
         tuxCubeCenterGroup.getChildren().clear();
 
@@ -287,17 +260,29 @@ final class FXSubScene {
     ObservableList<Node> createPlanetarySystem(ArrayList<Planet> planets){
         ObservableList<Node> planetCenterList = tuxCubeCenterGroup.getChildren(); 
         
-        planetCenterList.add(createPlanetGroup("Sun", Color.GOLD, Color.YELLOW, 0.19, 0, 0, 0));
+        planetCenterList.add(createPlanetGroup(getSun()));
         
         for(Planet planet : planets){
-            planetCenterList.add(createPlanetGroup(planet.getName(), planet.getFirstColor(), planet.getSecondColor(), planet.getRadius(), planet.getxEclipAdjusted(0), planet.getyEclipAdjusted(0), planet.getzEclipAdjusted(0)));
-            //System.out.println("Planet position: " + planet.getxEclipAdjusted(0)+ ", " + planet.getyEclipAdjusted(0) + ", " + planet.getzEclipAdjusted(0));
+            planetCenterList.add(createPlanetGroup(planet));
         }
         
         return planetCenterList;
     }
-    
-    Group createPlanetGroup(String planetName, Color diffuseColor, Color specularColor, double sphereRadius, double x, double y, double z){
+
+    Planet getSun(){
+        Planet sun = new Planet("Sun", Color.GOLD, Color.YELLOW, 0.19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        return sun;
+    }
+
+    Group createPlanetGroup(final Planet planet){
+        final String planetName = planet.getName();
+        Color diffuseColor = planet.getFirstColor();
+        Color specularColor = planet.getSecondColor();
+        double sphereRadius = planet.getRadius();
+        double x = planet.getxEclipAdjusted(0);
+        double y = planet.getyEclipAdjusted(0);
+        double z = planet.getzEclipAdjusted(0);
+
         final double transZ = -0.01396;
         long delay = 4;
         final int numTux = 3;
@@ -318,7 +303,7 @@ final class FXSubScene {
         planetSphere.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {                
-                MainScene.setNameForPlanetInfoPane(planetName);
+                MainScene.setNameForPlanetInfoPane(planet.getName());
                 MainScene.showPlanetInfoPane();
             }
         });
