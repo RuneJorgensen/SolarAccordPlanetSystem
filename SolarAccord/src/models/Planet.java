@@ -7,13 +7,13 @@ public class Planet {
 	double N, i, w, a, e, M, E, x, y, r, v, xEclip, yEclip, zEclip;
 	int day = 0;
 	int daysInYear = 300;
-	String name;
-        Color firstColor;
-        Color secondColor;
-        double radius;
+	String name, description;
+	Color firstColor;
+	Color secondColor;
+	double radius;
 
 	/**
-	 * 
+	 *
 	 * @param name Planet name
 	 * @param NMod1 Longtitude of ascending node
 	 * @param NMod2 Longtitude of ascending node 
@@ -28,8 +28,8 @@ public class Planet {
 	 * @param MMod1 Mean anomaly
 	 * @param MMod2 Mean anomaly
 	 */
-	public Planet(String name, double NMod1, double NMod2, double iMod1, double iMod2, double wMod1, double wMod2, 
-			double aMod1, double aMod2, double eMod1, double eMod2, double MMod1, double MMod2){
+	public Planet(String name, double NMod1, double NMod2, double iMod1, double iMod2, double wMod1, double wMod2,
+				  double aMod1, double aMod2, double eMod1, double eMod2, double MMod1, double MMod2){
 		this.NMod1 = NMod1;
 		this.NMod2 = NMod2;
 		this.iMod1 = iMod1;
@@ -42,15 +42,16 @@ public class Planet {
 		this.eMod2 = eMod2;
 		this.MMod1 = MMod1;
 		this.MMod2 = MMod2;
-		calcVariables();		
+		calcVariables();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param name Planet name
-         * @param firstColor firstColor of the planet
-         * @param secondColor secondColor of the planet
-         * @param radius double radius of sphere
+	 * @param description Planet description
+	 * @param firstColor firstColor of the planet
+	 * @param secondColor secondColor of the planet
+	 * @param radius double radius of sphere
 	 * @param daysInYear days it takes to fulfill an orbit. Only used when drawing the planet orbit
 	 * @param NMod1 Longtitude of ascending node
 	 * @param NMod2 Longtitude of ascending node 
@@ -65,8 +66,8 @@ public class Planet {
 	 * @param MMod1 Mean anomaly
 	 * @param MMod2 Mean anomaly
 	 */
-	public Planet(String name, Color firstColor, Color secondColor, double radius, int daysInYear, double NMod1, double NMod2, double iMod1, double iMod2, double wMod1, double wMod2, 
-			double aMod1, double aMod2, double eMod1, double eMod2, double MMod1, double MMod2){
+	public Planet(String name, String description, Color firstColor, Color secondColor, double radius, int daysInYear, double NMod1, double NMod2, double iMod1, double iMod2, double wMod1, double wMod2,
+				  double aMod1, double aMod2, double eMod1, double eMod2, double MMod1, double MMod2){
 		this.NMod1 = NMod1;
 		this.NMod2 = NMod2;
 		this.iMod1 = iMod1;
@@ -79,14 +80,15 @@ public class Planet {
 		this.eMod2 = eMod2;
 		this.MMod1 = MMod1;
 		this.MMod2 = MMod2;
-                this.firstColor = firstColor;
-                this.secondColor = secondColor;
-                this.radius = radius;
+		this.firstColor = firstColor;
+		this.secondColor = secondColor;
+		this.radius = radius;
 		this.daysInYear = daysInYear;
 		this.name = name;
-		calcVariables();		
+		this.description = description;
+		calcVariables();
 	}
-	
+
 	private void calcVariables(){
 		setN(rev(NMod1 + NMod2 * day));
 		setSmallI(rev(iMod1 + iMod2 * day));
@@ -94,38 +96,38 @@ public class Planet {
 		setSmallA(aMod1 + aMod2);
 		setSmallE(eMod1 + eMod2 * day);
 		setM(rev(MMod1 + MMod2 * day));
-		
+
 		double radians = Math.toRadians(M);
 
 		findEDiff(M, true);
 
 		radians = Math.toRadians(E);
 		setSmallX(a * (Math.cos(radians) - e));
-		
+
 		setSmallY(a * Math.sqrt(1 - e * e) * Math.sin(radians));
-		
+
 		setSmallR(Math.sqrt(x*x + y*y));
-		
+
 //		setSmallV(Math.atan2(y, x));
 		setSmallV(Math.toDegrees(Math.atan2(y, x)));
-		
+
 		double radianN = Math.toRadians(N);
 		double radianVW = Math.toRadians(v+w);
 		double radianI = Math.toRadians(i);
-		
-	
+
+
 		setxEclip(r * ( Math.cos(radianN) * Math.cos(radianVW) - Math.sin(radianN) * Math.sin(radianVW) * Math.cos(radianI)));
 
 		setyEclip(r * ( Math.sin(radianN) * Math.cos(radianVW) + Math.cos(radianN) * Math.sin(radianVW) * Math.cos(radianI) ));
-		
+
 		setzEclip(r * Math.sin(radianVW) * Math.sin(radianI));
 		//	    xeclip = r * ( cos(N) * cos(v+w) - sin(N) * sin(v+w) * cos(i) )
 //	    yeclip = r * ( sin(N) * cos(v+w) + cos(N) * sin(v+w) * cos(i) )
 //	    zeclip = r * sin(v+w) * sin(i)
 
-		
+
 	}
-	
+
 	private void findEDiff(double varM, boolean firstRun){
 		double radians = Math.toRadians(varM);
 		double varE;
@@ -143,21 +145,21 @@ public class Planet {
 			setE(varE);
 		}
 	}
-	
-    private double rev( double x )
-    {
-        return  x - Math.floor(x/360.0)*360.0;
-    }
-	
+
+	private double rev( double x )
+	{
+		return  x - Math.floor(x/360.0)*360.0;
+	}
+
 	public int getDay(){
 		return this.day;
 	}
-	
+
 	public void setDay(int day){
 		this.day = day;
 		calcVariables();
 	}
-	
+
 	public double getN() {
 		return N;
 	}
@@ -265,7 +267,7 @@ public class Planet {
 	private void setSmallV(double v) {
 		this.v = v;
 	}
-	
+
 	public double getxEclip() {
 		return xEclip;
 	}
@@ -273,7 +275,7 @@ public class Planet {
 	private void setxEclip(double xEclip) {
 		this.xEclip = xEclip;
 	}
-	
+
 	public double getxEclipAdjusted(int constant) {
 		return (xEclip) + constant;
 	}
@@ -285,7 +287,7 @@ public class Planet {
 	private void setyEclip(double yEclip) {
 		this.yEclip = yEclip;
 	}
-	
+
 	public double getyEclipAdjusted(int constant) {
 		return (yEclip) + constant;
 	}
@@ -297,11 +299,11 @@ public class Planet {
 	private void setzEclip(double zEclip) {
 		this.zEclip = zEclip;
 	}
-	
+
 	public double getzEclipAdjusted(int constant) {
 		return (zEclip) + constant;
 	}
-	
+
 
 	public int getDaysInYear() {
 		return daysInYear;
@@ -310,23 +312,23 @@ public class Planet {
 	private void setDaysInYear(int daysInYear) {
 		this.daysInYear = daysInYear;
 	}
-        
-        public Color getFirstColor(){
-            return firstColor;
-        }
-        
-        public void setFirstColor(Color firstColor){
-            this.firstColor = firstColor;
-        }
-        
-        public Color getSecondColor(){
-            return secondColor;
-        }
-        
-        public void setSecondColor(Color secondColor){
-            this.secondColor = secondColor;
-        }
-	
+
+	public Color getFirstColor(){
+		return firstColor;
+	}
+
+	public void setFirstColor(Color firstColor){
+		this.firstColor = firstColor;
+	}
+
+	public Color getSecondColor(){
+		return secondColor;
+	}
+
+	public void setSecondColor(Color secondColor){
+		this.secondColor = secondColor;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -334,14 +336,21 @@ public class Planet {
 	private void setName(String name) {
 		this.name = name;
 	}
-        
-        public double getRadius() {
-            return radius;
-        }
 
-        public void setRadius(double radius) {
-            this.radius = radius;
-        }       
+	public double getRadius() {
+		return radius;
+	}
 
+	public void setRadius(double radius) {
+		this.radius = radius;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }
 

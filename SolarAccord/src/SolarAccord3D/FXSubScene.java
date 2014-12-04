@@ -270,7 +270,8 @@ final class FXSubScene {
     }
 
     Planet getSun(){
-        Planet sun = new Planet("Sun", Color.GOLD, Color.YELLOW, 0.19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        String description = "";
+        Planet sun = new Planet("Sun", description, Color.GOLD, Color.YELLOW, 0.19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         return sun;
     }
 
@@ -304,6 +305,7 @@ final class FXSubScene {
             @Override
             public void handle(MouseEvent mouseEvent) {                
                 MainScene.setNameForPlanetInfoPane(planet.getName());
+                MainScene.setDescriptionForPlanetInfoPane(planet.getDescription());
                 MainScene.showPlanetInfoPane();
             }
         });
